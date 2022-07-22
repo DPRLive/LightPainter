@@ -13,6 +13,17 @@ AHandController::AHandController()
 	MotionController->SetShowDeviceModel(true); // 자동으로 모델 인식
 }
 
+void AHandController::TriggerPressed()
+{
+	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
+	CurrentStroke->SetActorLocation(GetActorLocation());
+}
+
+void AHandController::TriggerReleased()
+{
+	CurrentStroke = nullptr;
+}
+
 void AHandController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -23,5 +34,7 @@ void AHandController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(CurrentStroke != nullptr)
+		CurrentStroke->Update(GetActorLocation());
 }
 

@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
+
+#include "HandController.h"
+
 #include "VRPawn.generated.h"
 
 UCLASS()
@@ -17,11 +20,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 private:
 	// Config
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class AHandController> HandControllerClass;
+		TSubclassOf<AHandController> HandControllerClass;
 
 	// Components
 	UPROPERTY(VisibleAnywhere)
@@ -33,4 +36,7 @@ private:
 	// References
 	UPROPERTY()
 		AHandController* RightHandController;
+
+	void RightTriggerPressed() { if (RightHandController) RightHandController->TriggerPressed(); }
+	void RightTriggerReleased() { if (RightHandController) RightHandController->TriggerReleased(); }
 };
