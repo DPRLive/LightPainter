@@ -3,7 +3,7 @@
 #include "Engine/World.h"
 #include "VRPawn.h"
 
-
+#include "Saving/PainterSaveGame.h"
 
 AVRPawn::AVRPawn()
 {
@@ -26,6 +26,9 @@ void AVRPawn::BeginPlay()
 		RightHandController->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 		RightHandController->SetOwner(this);
 	}
+
+	UPainterSaveGame* Painting =  UPainterSaveGame::Create();
+	Painting->Save();
 }
 
 void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
