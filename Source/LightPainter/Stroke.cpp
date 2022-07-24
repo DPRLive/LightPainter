@@ -5,6 +5,8 @@
 #include "Components/SplineMeshComponent.h"
 #include "Math/Quat.h"
 
+#include "Engine/World.h"
+
 AStroke::AStroke()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -26,6 +28,8 @@ AStroke::AStroke()
 
 void AStroke::Update(FVector CursorLocation)
 {
+	ControlPoints.Add(CursorLocation);
+
 	if (PreviousCursorLocation.IsNearlyZero())
 	{
 		PreviousCursorLocation = CursorLocation;
@@ -37,6 +41,24 @@ void AStroke::Update(FVector CursorLocation)
 	JointMeshes->AddInstance(GetNextJointTransform(CursorLocation));
 
 	PreviousCursorLocation = CursorLocation;
+}
+
+FStrokeState AStroke::SerializeToStruct() const
+{
+	FStrokeState StrokeState;
+	StrokeState.Class = GetClass();
+	StrokeState.ControlPoints = ControlPoints;
+	return StrokeState;
+}
+
+AStroke* AStroke::SpawnAndDeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState)
+{
+	AStroke* Stroke = World->SpawnActor<AStroke>(StrokeState.Class);
+	for (FVector ControlPoint : StrokeState.ControlPoints)
+	{
+		Stroke->Update(ControlPoint);
+	}
+	return Stroke;
 }
 
 FTransform AStroke::GetNextSegmentTransform(FVector CurrentLocation) const
