@@ -2,6 +2,7 @@
 
 
 #include "UIPointerHandController.h"
+#include "InputCoreTypes.h"
 
 // Sets default values
 AUIPointerHandController::AUIPointerHandController()
@@ -9,19 +10,18 @@ AUIPointerHandController::AUIPointerHandController()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Pointer = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Pointer"));
+	Pointer->SetupAttachment(GetRootComponent());
 }
 
-// Called when the game starts or when spawned
-void AUIPointerHandController::BeginPlay()
+void AUIPointerHandController::TriggerPressed()
 {
-	Super::BeginPlay();
-	
+	// 그 키를 마우스 왼쪽클릭 한거마냥 누름
+	Pointer->PressPointerKey(EKeys::LeftMouseButton);
 }
 
-// Called every frame
-void AUIPointerHandController::Tick(float DeltaTime)
+void AUIPointerHandController::TriggerReleased()
 {
-	Super::Tick(DeltaTime);
-
+	Pointer->ReleasePointerKey(EKeys::LeftMouseButton);
 }
 

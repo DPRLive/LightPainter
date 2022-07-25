@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/WidgetInteractionComponent.h"
+
+#include "HandControllerBase.h"
+
 #include "UIPointerHandController.generated.h"
 
 UCLASS()
-class LIGHTPAINTER_API AUIPointerHandController : public AActor
+class LIGHTPAINTER_API AUIPointerHandController : public AHandControllerBase
 {
 	GENERATED_BODY()
 	
@@ -15,12 +19,11 @@ public:
 	// Sets default values for this actor's properties
 	AUIPointerHandController();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void TriggerPressed() override;
+	virtual void TriggerReleased() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
+	UPROPERTY(VisibleAnywhere)
+		UWidgetInteractionComponent* Pointer;
 
 };
