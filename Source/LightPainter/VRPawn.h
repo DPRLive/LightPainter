@@ -37,6 +37,9 @@ private:
 	UPROPERTY()
 		AHandControllerBase* RightPaintBrushHandController;
 
+	// State
+	FString CurrentSlotName;
+
 	void RightTriggerPressed() { if (RightPaintBrushHandController) RightPaintBrushHandController->TriggerPressed(); }
 	void RightTriggerReleased() { if (RightPaintBrushHandController) RightPaintBrushHandController->TriggerReleased(); }
 

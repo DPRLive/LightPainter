@@ -12,18 +12,19 @@
 UPainterSaveGame* UPainterSaveGame::Create()
 {
 	// StaticClass는 컴파일 타임에 클래스에 대한 정보를 가져옴
-	USaveGame* NewSaveGame = UGameplayStatics::CreateSaveGameObject(StaticClass());
-	return Cast<UPainterSaveGame>(NewSaveGame);
+	UPainterSaveGame* NewSaveGame = Cast<UPainterSaveGame>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
+	NewSaveGame->SlotName = FGuid::NewGuid().ToString();
+	return NewSaveGame;
 }
 
 bool UPainterSaveGame::Save()
 {
-	return UGameplayStatics::SaveGameToSlot(this, TEXT("Test"), 0);
+	return UGameplayStatics::SaveGameToSlot(this, SlotName, 0);
 }
 
-UPainterSaveGame* UPainterSaveGame::Load()
+UPainterSaveGame* UPainterSaveGame::Load(FString SlotName)
 {
-	return Cast<UPainterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Test"), 0));
+	return Cast<UPainterSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
 }
 
 void UPainterSaveGame::SerializeFromWorld(UWorld* World)
