@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/UniformGridPanel.h"
+#include "PaintingGridCard.h"
 #include "PaintingGrid.generated.h"
 
 /**
@@ -17,7 +18,7 @@ class LIGHTPAINTER_API UPaintingGrid : public UUserWidget
 		
 public:
 	UFUNCTION(BlueprintCallable)
-		void AddPainting();
+		void AddPainting(int32 PaintingIndex, FString PaintingName);
 	
 protected:
 	// 블루프린트 위젯 바인딩
@@ -26,5 +27,5 @@ protected:
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<UUserWidget> GirdCardClass;
+		TSubclassOf<UPaintingGridCard> GirdCardClass;
 };
