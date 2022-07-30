@@ -3,6 +3,8 @@
 #include "VRPawn.h"
 #include "Engine/World.h"
 
+#include "PaintingGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Saving/PainterSaveGame.h"
 
 AVRPawn::AVRPawn()
@@ -19,13 +21,6 @@ AVRPawn::AVRPawn()
 void AVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UPainterSaveGame* Painting = UPainterSaveGame::Create();
-	if (Painting && Painting->Save())
-	{
-		CurrentSlotName = Painting->GetSlotName();
-	}
-
 	if (PaintBrushHandControllerClass)
 	{
 		RightPaintBrushHandController = GetWorld()->SpawnActor<AHandControllerBase>(PaintBrushHandControllerClass);
@@ -42,31 +37,14 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), EInputEvent::IE_Released, this, &AVRPawn::RightTriggerReleased);
 
 	PlayerInputComponent->BindAction(TEXT("Save"), EInputEvent::IE_Pressed, this, &AVRPawn::Save);
-	PlayerInputComponent->BindAction(TEXT("Load"), EInputEvent::IE_Pressed, this, &AVRPawn::Load);
 }
 
 void AVRPawn::Save()
 {
-	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
+	// 게임모드를 게임모드를 이용하여 불러와 세이브
+	auto GameMode = Cast<APaintingGameMode>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+	GameMode->Save();
 
-	if (Painting)
-	{
-		Painting->SetState("Hello World!");
-		Painting->SerializeFromWorld(GetWorld());
-		Painting->Save();
-	}
-}
-
-void AVRPawn::Load()
-{
-	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
-	if (Painting)
-	{
-		Painting->DeserializeToWorld(GetWorld());
-		UE_LOG(LogTemp, Warning, TEXT("Painting state %s"), *Painting->GetState());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not found"));
-	}
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Maps/MainMenu"));
 }

@@ -20,6 +20,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void AddPainting(int32 PaintingIndex, FString PaintingName);
 	
+	void ClearPaintings();
 protected:
 	// 블루프린트 위젯 바인딩
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, meta = (BindWidget))

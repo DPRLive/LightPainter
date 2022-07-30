@@ -15,12 +15,11 @@ UPainterSaveGame* UPainterSaveGame::Create()
 	// StaticClass는 컴파일 타임에 클래스에 대한 정보를 가져옴
 	UPainterSaveGame* NewSaveGame = Cast<UPainterSaveGame>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
 	NewSaveGame->SlotName = FGuid::NewGuid().ToString();
-	if (!NewSaveGame->Save()) return nullptr;
+	/*if (!NewSaveGame->Save()) return nullptr;
 
 	UPainterSaveGameIndex* Index = UPainterSaveGameIndex::Load();
 	Index->AddSaveGame(NewSaveGame);
-	Index->Save();
-	
+	Index->Save();*/
 	return NewSaveGame;
 }
 
